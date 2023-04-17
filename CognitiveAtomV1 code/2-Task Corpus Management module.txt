@@ -1,0 +1,42 @@
+Using the provided Task Corpus Management module, let's integrate it with the existing CognitiveAtomV1 class:
+
+First, add a TaskCorpusManager instance to the CognitiveAtomV1 class:
+
+python
+
+from task_corpus_management import TaskCorpusManager
+
+class CognitiveAtomV1(CognitiveAgentV4):
+    def __init__(self):
+        super().__init__()
+        self.task_lifecycle = TaskLifecycle()
+        self.task_corpus_manager = TaskCorpusManager(self.task_lifecycle)
+
+Now, extend the process_input method to handle task corpus-related inputs:
+
+python
+
+class CognitiveAtomV1(CognitiveAgentV4):
+    # ...
+
+    def process_input(self, input_text: str):
+        # ... Handle task-related actions ...
+
+        # Process input for task corpus-related actions
+        elif "list tasks by priority" in input_text:
+            tasks = self.task_corpus_manager.get_tasks_by_priority(int(input_text.split()[-1]))
+            response = "Tasks with the specified priority:\n" + "\n".join(map(str, tasks))
+        elif "list tasks by deadline" in input_text:
+            tasks = self.task_corpus_manager.get_tasks_by_deadline(input_text.split()[-1])
+            response = "Tasks with the specified deadline:\n" + "\n".join(map(str, tasks))
+        # ... Handle other task corpus-related actions ...
+
+        # If the input is not task or task corpus-related, process it using the existing method
+        else:
+            response = super().process_input(input_text)
+
+        return response
+
+Now, the CognitiveAtomV1 agent can handle both task and task corpus-related inputs, along with the original functionality provided by CognitiveAgentV4-0.
+
+Remember that this is a simplified example. You can extend this approach to handle other task corpus-related actions or integrate additional modules from the atomv0-fullsample.

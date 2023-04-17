@@ -1,0 +1,41 @@
+To integrate the Evaluation module into the existing CognitiveAtomV1 class, let's create an EvaluationModule instance within the CognitiveAtomV1 class, and then modify the process_input method to handle evaluation-related inputs:
+
+First, add an EvaluationModule instance to the CognitiveAtomV1 class:
+
+python
+
+from evaluation_module import EvaluationModule
+
+class CognitiveAtomV1(CognitiveAgentV4):
+    def __init__(self):
+        super().__init__()
+        self.task_lifecycle = TaskLifecycle()
+        self.task_corpus_manager = TaskCorpusManager(self.task_lifecycle)
+        self.evaluation_module = EvaluationModule()
+
+Now, extend the process_input method to handle evaluation-related inputs:
+
+python
+
+class CognitiveAtomV1(CognitiveAgentV4):
+    # ...
+
+    def process_input(self, input_text: str):
+        # ... Handle task-related and task corpus-related actions ...
+
+        # Process input for evaluation-related actions
+        elif "average execution time" in input_text:
+            task_id = input_text.split()[-1]
+            average_execution_time = self.evaluation_module.get_average_metric(task_id, 'execution_time')
+            response = f"Average execution time for task {task_id}: {average_execution_time} seconds"
+        # ... Handle other evaluation-related actions ...
+
+        # If the input is not task, task corpus, or evaluation-related, process it using the existing method
+        else:
+            response = super().process_input(input_text)
+
+        return response
+
+Now, the CognitiveAtomV1 agent can handle evaluation-related inputs, along with the original functionality provided by CognitiveAgentV4-0 and the previously integrated modules.
+
+Remember that this is a simplified example. You can extend this approach to handle other evaluation-related actions or integrate additional modules from the atomv0-fullsample.
